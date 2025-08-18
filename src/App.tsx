@@ -1,18 +1,7 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import CounterApp from './components/counter/CounterApp';
-import TodoListApp from './components/todo-list/TodoListApp';
-
-function PracticeHome() {
-  return (
-    <nav>
-      <h1>Practice Projects</h1>
-      <ul>
-        <li><Link to="/counter">Counter</Link></li>
-        <li><Link to="/todo-list">Todo-List</Link></li>
-      </ul>
-    </nav>
-  );
-}
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PracticeHome from "./pages/PracticeHome";
+import CounterApp from "./components/counter/CounterApp";
+import TodoListApp from "./components/todo-list/TodoListApp";
 
 function App() {
   return (
@@ -26,4 +15,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

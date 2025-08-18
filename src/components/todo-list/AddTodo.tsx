@@ -1,30 +1,58 @@
-import { useState } from "react"
-import { v4 as uuidv4 } from 'uuid';
-import type { TodoType } from '../types/todo';
+import { useState, useRef, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface AddTodoProps {
-  todoList: TodoType[];
-  setTodoList: React.Dispatch<React.SetStateAction<TodoType[]>>;
+  onDataChange: () => void;
 }
 
-export default function AddTodo({todoList, setTodoList}: AddTodoProps) {
-  const [inputValue, setInputValue] = useState("")
-  const handleAddTodo = () => {
+export default function AddTodo({ onDataChange }: AddTodoProps) {
+  const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleAddTodo = async () => {
     if (!inputValue.trim()) return;
-    const newTodo = {id: uuidv4(), content: inputValue}
-    const newTodoList = [...todoList, newTodo]
-    setTodoList(newTodoList);
-    setInputValue('');
-  }
+    const newTodo = { id: uuidv4(), content: inputValue, isDone: false };
+    try {
+      const response = await fetch("http://localhost:3001/todos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTodo),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add todo");
+      }
+
+      onDataChange();
+
+      setInputValue("");
+    } catch (error) {
+      console.error("Error adding todo:", error);
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleAddTodo();
+    }
+  };
 
   return (
-    <>
-      <input 
-      value={inputValue} 
-      onChange={(event) => setInputValue(event.target.value)} />
-      <button onClick={() => handleAddTodo()}>
-        enter
-      </button>
-    </>
-  )
+    <div className="input-group">
+      <input
+        ref={inputRef}
+        value={inputValue}
+        onChange={(event) => setInputValue(event.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Add a new task"
+      />
+      <button onClick={() => handleAddTodo()}>Add</button>
+    </div>
+  );
 }
