@@ -1,15 +1,35 @@
 import { useState, useEffect, useCallback } from "react";
 
-export function useFetch<T>(url: string) {
-  const [data, setData] = useState<T | null>(null);
+export function useFetch<T>(url: string, cacheKey?: string) {
+  const getInitialData = (): T | null => {
+    if (cacheKey) {
+      const savedData = localStorage.getItem(cacheKey);
+      if (savedData) {
+        try {
+          return JSON.parse(savedData);
+        } catch (e) {
+          console.error("Failed to parse cached data:", e);
+          return null;
+        }
+      }
+    }
+    return null;
+  };
+  const [data, setData] = useState<T | null>(getInitialData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const jsonData = await response.json();
+      if (cacheKey) {
+        localStorage.setItem(cacheKey, JSON.stringify(jsonData));
+      }
       setData(jsonData);
     } catch (e) {
       if (e instanceof Error) {
@@ -20,7 +40,7 @@ export function useFetch<T>(url: string) {
     } finally {
       setLoading(false);
     }
-  }, [url]);
+  }, [url, cacheKey]);
 
   useEffect(() => {
     fetchData();

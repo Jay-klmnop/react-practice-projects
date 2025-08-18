@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import type { Action } from "../../reducers/todoReducer";
 
 interface AddTodoProps {
-  onDataChange: () => void;
+  dispatch: React.Dispatch<Action>;
 }
 
-export default function AddTodo({ onDataChange }: AddTodoProps) {
+export default function AddTodo({ dispatch }: AddTodoProps) {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -16,6 +17,10 @@ export default function AddTodo({ onDataChange }: AddTodoProps) {
   const handleAddTodo = async () => {
     if (!inputValue.trim()) return;
     const newTodo = { id: uuidv4(), content: inputValue, isDone: false };
+
+    dispatch({ type: "ADD_TODO", payload: newTodo });
+    setInputValue("");
+
     try {
       const response = await fetch("http://localhost:3001/todos", {
         method: "POST",
@@ -29,11 +34,10 @@ export default function AddTodo({ onDataChange }: AddTodoProps) {
         throw new Error("Failed to add todo");
       }
 
-      onDataChange();
-
       setInputValue("");
     } catch (error) {
       console.error("Error adding todo:", error);
+      dispatch({ type: "DELETE_TODO", payload: newTodo.id });
     }
   };
 
