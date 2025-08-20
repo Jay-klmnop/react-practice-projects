@@ -9,7 +9,7 @@ export function useTodos() {
     data: initialTodos,
     loading,
     error,
-  } = useFetch<TodoType[]>("http://localhost:3001/todos", "todos");
+  } = useFetch<TodoType[]>("./api/todos", "todos");
 
   useEffect(() => {
     if (initialTodos) {

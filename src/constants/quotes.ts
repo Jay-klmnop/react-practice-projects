@@ -85,7 +85,7 @@ It will be a fight, it will be a dance`,
   },
   {
     author: "Hedy Lamarr",
-    text: `Hope & curiosity about the future seemed better than guarantees. The unknown was always so attractive to me…and still is.`,
+    text: `Hope & curiosity about the future seemed better than guarantees. The unknown was always so attractive to me… and still is.`,
   },
   {
     author: "Hedy Lamarr",

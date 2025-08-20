@@ -4,11 +4,19 @@ interface CounterInputProps {
   setCounterNumber: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export default function CounterInput({inputValue, setInputValue, setCounterNumber}: CounterInputProps) {
+export default function CounterInput({
+  inputValue,
+  setInputValue,
+  setCounterNumber,
+}: CounterInputProps) {
   return (
-    <>
-      <input type="number" value={inputValue} onChange={(event) => setInputValue(Number(event.target.value))} />
+    <div className="input-group">
+      <input
+        type="number"
+        value={inputValue}
+        onChange={(event) => setInputValue(Number(event.target.value))}
+      />
       <button onClick={() => setCounterNumber(inputValue)}>enter</button>
-    </>
-  )
+    </div>
+  );
 }

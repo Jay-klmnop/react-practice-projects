@@ -1,4 +1,39 @@
 import type { Dispatch, SetStateAction } from "react";
+import styled from "styled-components";
+import { colorMixin, flexMixin, fontMixin } from "../../styles/styledMixin";
+import {
+  color_extralightgrey,
+  color_violet,
+  color_white,
+  spacing_sm,
+  spacing_xs,
+  spacing_xxs,
+} from "../../styles/styledVariables";
+
+const StyledFilterControls = styled.div`
+  ${flexMixin({ direction: "column", gap: spacing_sm })}
+  margin-bottom: ${spacing_sm};
+
+  input {
+    ${fontMixin()}
+    width: 100%;
+    padding: ${spacing_xs} ${spacing_sm};
+    border: 1px solid ${color_extralightgrey};
+    border-radius: ${spacing_xxs};
+  }
+
+  .filter-buttons {
+    ${flexMixin({ gap: spacing_xs })}
+  }
+
+  .filter-buttons button.active {
+    ${colorMixin({
+      background: color_violet,
+      text: color_white,
+      border: color_violet,
+    })}
+  }
+`;
 
 interface FilterControlsProps {
   filter: "all" | "checked" | "unchecked";
@@ -14,9 +49,8 @@ export default function FilterControls({
   setSearchTerm,
 }: FilterControlsProps) {
   return (
-    <div className="filter-controls">
+    <StyledFilterControls>
       <input
-        className="search-input"
         type="text"
         placeholder="Search..."
         value={searchTerm}
@@ -42,6 +76,6 @@ export default function FilterControls({
           Uncompleted
         </button>
       </div>
-    </div>
+    </StyledFilterControls>
   );
 }

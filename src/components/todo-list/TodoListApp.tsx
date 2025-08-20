@@ -8,6 +8,39 @@ import FilterControls from "./FilterControls";
 import TodoList from "./TodoList";
 import EditModal from "./EditModal";
 import AddTodo from "./AddTodo";
+import { GlobalStyle } from "../../styles/GlobalStyle";
+import styled from "styled-components";
+import { colorMixin, flexMixin } from "../../styles/styledMixin";
+import {
+  color_darkviolet,
+  color_white,
+  spacing_md,
+  spacing_sm,
+  spacing_xxs,
+} from "../../styles/styledVariables";
+
+const StyledTodoApp = styled.main`
+  ${colorMixin({ background: color_darkviolet })}
+  ${flexMixin({
+    direction: "column",
+    gap: spacing_sm,
+  })}
+  padding: ${spacing_md};
+  border-radius: ${spacing_xxs};
+
+  p {
+    color: ${color_white};
+  }
+
+  figure {
+    background-color: ${color_white};
+    border-radius: ${spacing_xxs};
+  }
+
+  li {
+    color: ${color_white};
+  }
+`;
 
 export default function TodoListApp() {
   const { todoList, dispatch, loading, error } = useTodos();
@@ -39,7 +72,8 @@ export default function TodoListApp() {
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <>
+    <StyledTodoApp>
+      <GlobalStyle />
       <Clock />
       <Quote />
       <FilterControls
@@ -61,6 +95,6 @@ export default function TodoListApp() {
         />
       )}
       <AddTodo dispatch={dispatch} />
-    </>
+    </StyledTodoApp>
   );
 }
